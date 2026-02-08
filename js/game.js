@@ -1,64 +1,98 @@
-let currentPool = [];
+let player = "";
+let mode = "";
+let score = 0;
+let level = 1;
+let gridSize = 4;
+let answer = null;
+
+const sounds = {
+  click: new Audio("audio/click.mp3"),
+  success: new Audio("audio/success.mp3"),
+  fail: new Audio("audio/fail.mp3")
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("startBtn")
+    .addEventListener("click", startMatch);
+});
 
 function startMatch() {
-  startMatch();
+  player = document.getElementById("playerName").value || "Player";
+  mode = document.getElementById("mode").value;
+
+  score = 0;
+  level = 1;
+  gridSize = 4;
+
+  document.getElementById("setup").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+
+  nextRound();
 }
 
 function nextRound() {
-  updateLevel();
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
 
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  grid.style.gridTemplateColumns = `repeat(${gridSize},1fr)`;
+  grid.style.gridTemplateColumns = `repeat(${Math.sqrt(gridSize)}, 1fr)`;
 
-  const total = gridSize * gridSize;
-  answerIndex = Math.floor(Math.random() * total);
+  const items = generateItems();
+  answer = items[Math.floor(Math.random() * items.length)];
 
-  currentPool = generatePool(total);
+  document.getElementById("status").textContent =
+    `เลือก: ${answer}`;
 
-  document.getElementById('display').innerText =
-    `🎯 หา: ${currentPool[answerIndex]} | คะแนน: ${score}`;
+  items.forEach(item => {
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.textContent = item;
 
-  currentPool.forEach((item, i) => {
-    const btn = document.createElement('button');
-    btn.innerText = item;
-    btn.onclick = () => selectCell(i, btn);
-    grid.appendChild(btn);
+    cell.onclick = () => handleClick(cell, item);
+    grid.appendChild(cell);
   });
-
-  setTimeout(() => {
-    [...grid.children].forEach(b => b.innerText = '❓');
-  }, revealTime);
 }
 
-function selectCell(i) {
+function handleClick(cell, value) {
   sounds.click.play();
 
-  const grid = document.getElementById('grid');
-  [...grid.children].forEach((b, idx) => {
-    b.innerText = currentPool[idx];
-    b.disabled = true;
-  });
-
-  if (i === answerIndex) {
-    sounds.correct.play();
+  if (value === answer) {
+    cell.classList.add("correct");
+    sounds.success.play();
     score += 10;
-    setTimeout(nextRound, 1200);
+    level++;
+    gridSize = Math.min(16, gridSize + 2);
+    setTimeout(nextRound, 600);
   } else {
-    sounds.wrong.play();
-    endGame();
+    cell.classList.add("wrong");
+    sounds.fail.play();
+    alert(`❌ เกมจบ\nคะแนน: ${score}`);
+    location.reload();
   }
+
+  document.getElementById("score").textContent = score;
 }
 
-function updateLevel() {
-  const prev = level;
-  level = Math.floor(score / 100) + 1;
-  gridSize = Math.min(4 + level - 1, 6);
+function generateItems() {
+  let base = [];
 
-  if (level >= 4 && mode === 'number') revealTime = 5000;
-  else if (level >= 2) revealTime = 4000;
-  else revealTime = 3000;
+  if (mode === "number") {
+    base = Array.from({ length: gridSize }, (_, i) => i + 1);
+  }
 
-  document.getElementById('level').innerText = `Lv.${level}`;
-  if (level > prev) sounds.levelup.play();
+  if (mode === "thai") {
+    base = ["ก","ข","ค","ง","จ","ฉ","ช","ซ","ด","ต","ถ","ท","น","บ","ป","พ"]
+      .slice(0, gridSize);
+  }
+
+  if (mode === "english") {
+    base = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      .split("")
+      .slice(0, gridSize);
+  }
+
+  return shuffle(base);
+}
+
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
 }
