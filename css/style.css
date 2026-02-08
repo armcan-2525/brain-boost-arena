@@ -82,3 +82,21 @@ body {
   border-radius: 10px;
   border: none;
 }
+@media (max-width: 480px) {
+  .container {
+    padding: 15px;
+  }
+
+  .buttons {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .title {
+    font-size: 1.6rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 12px;
+  }
+}
