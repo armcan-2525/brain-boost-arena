@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brain Boost Arena</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<div id="setup" class="card">
+<div class="card">
+
   <h1>🧠 Brain Boost Arena</h1>
 
-  <input id="playerName" placeholder="ชื่อผู้เล่น" />
+  <div id="setup">
+    <input id="playerName" placeholder="ชื่อผู้เล่น">
+    <select id="mode">
+      <option value="number">🔢 ตัวเลข</option>
+      <option value="thai">ก-ฮ ภาษาไทย</option>
+      <option value="eng">A-Z English</option>
+    </select>
+    <button onclick="startGame()">เริ่มเกม</button>
+  </div>
 
-  <select id="mode">
-    <option value="number">ตัวเลข</option>
-    <option value="thai">พยัญชนะไทย</option>
-    <option value="english">English</option>
-  </select>
+  <div class="game hidden">
+    <div id="level">Lv.1</div>
+    <div id="display"></div>
+    <div id="grid" class="grid"></div>
+  </div>
 
-  <button id="startBtn">▶ เริ่มเกม</button>
-</div>
-
-<div id="game" class="card hidden">
-  <h2 id="status"></h2>
-  <div id="grid"></div>
-  <p>คะแนน: <span id="score">0</span></p>
 </div>
 
 <script src="js/game.js"></script>
 </body>
 </html>
-
