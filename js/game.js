@@ -1,7 +1,7 @@
 let currentPool = [];
 
 function startMatch() {
-  startGame();
+  startMatch();
 }
 
 function nextRound() {
