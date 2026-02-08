@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Kanit', sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #0f2027;
+  color: white;
+  overflow: hidden;
+}
+
+.bg-anim {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, #00c6ff22, transparent),
+              linear-gradient(120deg, #203a43, #2c5364);
+  animation: moveBg 10s infinite alternate;
+  z-index: -1;
+}
+
+@keyframes moveBg {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(40deg); }
+}
+
+.container {
+  max-width: 420px;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  margin-top: 40px;
+}
+
+.subtitle {
+  opacity: 0.8;
+}
+
+.btn {
+  margin-top: 15px;
+  padding: 14px;
+  width: 100%;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 12px;
+  background: #00c6ff;
+  color: #000;
+  font-weight: bold;
+}
+
+.btn.secondary {
+  background: #ffd166;
+}
+
+.game {
+  margin-top: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.display {
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.buttons button {
+  padding: 14px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  border: none;
+}
