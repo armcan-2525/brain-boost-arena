@@ -1,102 +1,71 @@
 * {
   box-sizing: border-box;
-  font-family: 'Kanit', sans-serif;
+  font-family: "Segoe UI", sans-serif;
 }
 
 body {
   margin: 0;
+  background: radial-gradient(circle at top, #1b2735, #090a0f);
   min-height: 100vh;
-  background: #0f2027;
-  color: white;
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
 }
 
-.bg-anim {
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at top, #00c6ff22, transparent),
-              linear-gradient(120deg, #203a43, #2c5364);
-  animation: moveBg 10s infinite alternate;
-  z-index: -1;
-}
-
-@keyframes moveBg {
-  0% { filter: hue-rotate(0deg); }
-  100% { filter: hue-rotate(40deg); }
-}
-
-.container {
-  max-width: 420px;
-  margin: auto;
+.card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
   padding: 20px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 420px;
   text-align: center;
-}
-
-.title {
-  font-size: 2rem;
-  margin-top: 40px;
-}
-
-.subtitle {
-  opacity: 0.8;
-}
-
-.btn {
-  margin-top: 15px;
-  padding: 14px;
-  width: 100%;
-  font-size: 1.1rem;
-  border: none;
-  border-radius: 12px;
-  background: #00c6ff;
-  color: #000;
-  font-weight: bold;
-}
-
-.btn.secondary {
-  background: #ffd166;
-}
-
-.game {
-  margin-top: 20px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.5);
 }
 
 .hidden {
   display: none;
 }
 
-.display {
-  font-size: 1.6rem;
-  margin-bottom: 15px;
-}
-
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-.buttons button {
-  padding: 14px;
-  font-size: 1.1rem;
+input, select, button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
   border-radius: 10px;
   border: none;
+  font-size: 16px;
 }
-@media (max-width: 480px) {
-  .container {
-    padding: 15px;
-  }
 
-  .buttons {
-    grid-template-columns: repeat(3, 1fr);
-  }
+button {
+  background: linear-gradient(135deg, #00f2fe, #4facfe);
+  color: #000;
+  font-weight: bold;
+}
 
-  .title {
-    font-size: 1.6rem;
-  }
+#grid {
+  display: grid;
+  gap: 10px;
+  margin: 15px 0;
+}
 
-  button {
-    font-size: 1rem;
-    padding: 12px;
-  }
+.cell {
+  background: #222;
+  padding: 20px;
+  font-size: 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.cell:hover {
+  transform: scale(1.05);
+}
+
+.cell.correct {
+  background: #2ecc71;
+}
+
+.cell.wrong {
+  background: #e74c3c;
 }
