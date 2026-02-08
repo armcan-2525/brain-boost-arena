@@ -38,16 +38,14 @@ input, select, button {
 }
 
 button {
-  background: linear-gradient(135deg, #00f2fe, #4facfe);
-  color: #000;
-  font-weight: bold;
+  font-size: clamp(16px, 4vw, 24px);
+  aspect-ratio: 1/1;
+}
+#grid {
+  max-width: 95vw;
+  margin: auto;
 }
 
-#grid {
-  display: grid;
-  gap: 10px;
-  margin: 15px 0;
-}
 
 .cell {
   background: #222;
