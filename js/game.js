@@ -8,7 +8,7 @@ const bgm = document.getElementById('bgm');
 
 let score = 0;
 let level = 1;
-let gridSize = 4;          // 4x4 = 16 ช่อง (เวอร์ชันแรก)
+let gridSize = 4;
 let revealTime = 3000;
 let answerIndex = 0;
 let mode = 'number';
@@ -26,9 +26,7 @@ const snd = {
   level: new Audio('audio/levelup.mp3')
 };
 
-/* =====================
-   ▶ START GAME
-===================== */
+/* ▶ START GAME */
 function startGame() {
   player = document.getElementById('playerName').value || 'Player';
   mode = document.getElementById('mode').value;
@@ -51,9 +49,7 @@ function startGame() {
   startRound();
 }
 
-/* =====================
-   ▶ START ROUND
-===================== */
+/* ▶ START ROUND */
 function startRound() {
   canSelect = true;
   updateLevel();
@@ -61,7 +57,6 @@ function startRound() {
   const grid = document.getElementById('grid');
   grid.innerHTML = '';
 
-  /* 📐 Grid ให้สมส่วนจอ */
   grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
 
   const total = gridSize * gridSize;
@@ -75,7 +70,6 @@ function startRound() {
     const cell = document.createElement('button');
     cell.className = 'cell';
     cell.innerText = v;
-    cell.dataset.index = i;
     cell.onclick = () => checkAnswer(i, cell);
     grid.appendChild(cell);
   });
@@ -84,17 +78,16 @@ function startRound() {
   timeUp = setTimeout(hideCells, revealTime);
 }
 
-/* ⏱ หมดเวลา → ซ่อนเลข แต่ยังเดาได้ */
+/* ⏱ หมดเวลา → ปิดเลข แต่ยังเดาได้ */
 function hideCells() {
   document.querySelectorAll('.cell').forEach(btn => {
     btn.innerText = '❓';
-    btn.classList.add('hidden-cell');
+    btn.classList.add('masked');
   });
+  canSelect = true;
 }
 
-/* =====================
-   ▶ CHECK ANSWER
-===================== */
+/* ▶ CHECK ANSWER */
 function checkAnswer(i, cell) {
   if (!canSelect) return;
   canSelect = false;
@@ -117,31 +110,28 @@ function checkAnswer(i, cell) {
   }
 }
 
-/* =====================
-   ▶ LEVEL SYSTEM
-===================== */
+/* ▶ LEVEL SYSTEM (100–600 แต้ม ตามที่กำหนด) */
 function updateLevel() {
   const prev = level;
 
-  // คำนวณเลเวลจากคะแนน
-  level = Math.floor(score / 100) + 1;
-
-  // คุมไม่ให้เกินเลเวล 7
-  if (level > 7) level = 7;
-
-  // กำหนด gridSize ตามเลเวล
-  if (level <= 4) {
-    // เลข 2 หลัก เพิ่มช่องทีละ 4
-    gridSize = 4 + (level - 1); 
+  if (score < 100) {
+    level = 1; gridSize = 4;
+  } else if (score < 200) {
+    level = 2; gridSize = 5;
+  } else if (score < 300) {
+    level = 3; gridSize = 6;
+  } else if (score < 400) {
+    level = 4; gridSize = 7;
+  } else if (score < 500) {
+    level = 5; gridSize = 4; // เลข 3 หลัก 16 ช่อง
+  } else if (score < 600) {
+    level = 6; gridSize = 5;
   } else {
-    // เลข 3 หลัก รีเซ็ตเป็น 4x4 แล้วเพิ่ม
-    gridSize = 4 + (level - 5);
+    level = 7; gridSize = 6;
   }
 
-  // เวลาแสดงตัวเลข
   revealTime = level >= 5 ? 2500 : 3000;
 
-  // อัปเดต UI
   const lvEl = document.getElementById('level');
   lvEl.innerText = `Lv.${level}`;
 
@@ -152,17 +142,14 @@ function updateLevel() {
   }
 }
 
-
-/* =====================
-   ▶ POOL GENERATOR
-===================== */
+/* ▶ POOL GENERATOR */
 function generatePool(total) {
   let pool = [];
 
   if (mode === 'number') {
     pool = level >= 5
-      ? Array.from({ length: 900 }, (_, i) => i + 100) // 100–999
-      : Array.from({ length: 90 }, (_, i) => i + 10);  // 10–99
+      ? Array.from({ length: 900 }, (_, i) => i + 100)
+      : Array.from({ length: 90 }, (_, i) => i + 10);
   }
 
   if (mode === 'eng') {
@@ -178,10 +165,11 @@ function generatePool(total) {
   return shuffle(pool).slice(0, total);
 }
 
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
 
-/* =====================
-   ▶ END GAME
-===================== */
+/* ▶ END GAME */
 function endGame() {
   clearTimeout(timeUp);
   bgm.pause();
@@ -193,9 +181,7 @@ function endGame() {
   document.getElementById('gameOver').classList.remove('hidden');
 }
 
-/* =====================
-   🏆 RANK SYSTEM
-===================== */
+/* 🏆 RANK */
 function saveScore() {
   const key = 'rank_' + mode;
   const data = JSON.parse(localStorage.getItem(key) || '[]');
@@ -208,6 +194,7 @@ function renderRank() {
   const key = 'rank_' + document.getElementById('mode').value;
   const data = JSON.parse(localStorage.getItem(key) || '[]');
   const list = document.getElementById('rankList');
+  if (!list) return;
 
   list.innerHTML = '';
 
@@ -223,9 +210,7 @@ function renderRank() {
   });
 }
 
-/* =====================
-   ▶ CONTROLS
-===================== */
+/* ▶ CONTROLS */
 function restartGame() {
   document.getElementById('gameOver').classList.add('hidden');
   score = 0;
@@ -251,4 +236,4 @@ function toggleSound() {
 
 /* ▶ INIT */
 window.addEventListener('load', renderRank);
-document.getElementById('mode').addEventListener('change', renderRank);
+document.getElementById('mode')?.addEventListener('change', renderRank);
