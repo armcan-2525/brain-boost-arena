@@ -49,3 +49,128 @@ button {
 .grid button:active {
   transform: scale(.9);
 }
+/* =====================
+   📱 MOBILE OPTIMIZATION
+===================== */
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  min-height: 100vh;
+  padding: env(safe-area-inset-top)
+           env(safe-area-inset-right)
+           env(safe-area-inset-bottom)
+           env(safe-area-inset-left);
+}
+
+/* การ์ดหลัก */
+.card {
+  width: 100%;
+  max-width: 420px;
+  margin: auto;
+  padding: 16px;
+}
+
+/* หัวเกม */
+h1 {
+  font-size: clamp(20px, 5vw, 26px);
+  margin-bottom: 10px;
+}
+
+/* input / select / button */
+input,
+select,
+button {
+  width: 100%;
+  max-width: 100%;
+  font-size: 16px;
+  padding: 12px 16px;
+  margin: 6px 0;
+}
+
+/* ปุ่มหลัก */
+button {
+  min-height: 48px;
+  border-radius: 999px;
+}
+
+/* แสดงข้อมูล */
+#display {
+  font-size: clamp(14px, 4vw, 18px);
+  margin: 10px 0;
+}
+
+/* GRID เกม */
+#grid {
+  display: grid;
+  gap: 10px;
+}
+
+/* ช่องเกม */
+#grid button,
+.cell {
+  font-size: clamp(16px, 5vw, 22px);
+  padding: 14px 0;
+  border-radius: 14px;
+  min-height: 48px;
+  transition: transform .15s ease, background .15s ease;
+}
+
+/* เอฟเฟกต์กด */
+#grid button:active,
+.cell:active {
+  transform: scale(0.95);
+}
+
+/* สถานะ */
+#status {
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+/* ตารางคะแนน */
+table {
+  font-size: 13px;
+}
+
+/* ปุ่มล่าง */
+#restartBtn,
+#changeProfileBtn {
+  margin-top: 10px;
+}
+
+/* =====================
+   💫 Animation เบา ๆ
+===================== */
+
+.card {
+  animation: fadeUp .5s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================
+   📲 จอเล็กมาก
+===================== */
+@media (max-width: 360px) {
+  #grid {
+    gap: 6px;
+  }
+
+  #grid button {
+    font-size: 14px;
+    padding: 10px 0;
+  }
+}
