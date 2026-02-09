@@ -147,3 +147,5 @@ function showRank() {
   const data = JSON.parse(localStorage.getItem(key) || '[]');
   console.table(data);
 }
+document.getElementById('level').classList.add('level-up');
+setTimeout(()=>level.classList.remove('level-up'),600);
