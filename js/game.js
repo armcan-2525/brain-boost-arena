@@ -75,22 +75,26 @@ function checkAnswer(i, cell) {
     endGame();
   }
 }
-
 function updateLevel() {
   const prev = level;
+
   level = Math.floor(score / 100) + 1;
+  gridSize = 4 + level - 1;
+  revealTime = level >= 3 ? 5000 : 3000;
 
-  // เพิ่มทีละ 4 ช่อง
-  gridSize = 4 + (level - 1);
+  const lvEl = document.getElementById('level');
+  lvEl.innerText = `Lv.${level}`;
 
-  // เวลา
-  if (level >= 4) revealTime = 5000;
-  else if (level >= 2) revealTime = 4000;
-  else revealTime = 3000;
+  if (level > prev) {
+    sounds.levelup.play();
 
-  document.getElementById('level').innerText = `Lv.${level}`;
-  if (level > prev) snd.level.play();
+    // trigger animation
+    lvEl.classList.add('level-up');
+    setTimeout(() => lvEl.classList.remove('level-up'), 600);
+  }
 }
+
+
 
 function generatePool(total) {
   let pool = [];
