@@ -122,15 +122,26 @@ function checkAnswer(i, cell) {
 ===================== */
 function updateLevel() {
   const prev = level;
+
+  // คำนวณเลเวลจากคะแนน
   level = Math.floor(score / 100) + 1;
 
-  /* คุมไม่ให้ยากเร็ว */
-  if (level < 4) gridSize = 4;
-  else if (level < 7) gridSize = 5;
-  else gridSize = 6;
+  // คุมไม่ให้เกินเลเวล 7
+  if (level > 7) level = 7;
 
-  revealTime = level >= 5 ? 5000 : 3000;
+  // กำหนด gridSize ตามเลเวล
+  if (level <= 4) {
+    // เลข 2 หลัก เพิ่มช่องทีละ 4
+    gridSize = 4 + (level - 1); 
+  } else {
+    // เลข 3 หลัก รีเซ็ตเป็น 4x4 แล้วเพิ่ม
+    gridSize = 4 + (level - 5);
+  }
 
+  // เวลาแสดงตัวเลข
+  revealTime = level >= 5 ? 2500 : 3000;
+
+  // อัปเดต UI
   const lvEl = document.getElementById('level');
   lvEl.innerText = `Lv.${level}`;
 
@@ -141,6 +152,7 @@ function updateLevel() {
   }
 }
 
+
 /* =====================
    ▶ POOL GENERATOR
 ===================== */
@@ -148,9 +160,9 @@ function generatePool(total) {
   let pool = [];
 
   if (mode === 'number') {
-    pool = level < 5
-      ? Array.from({ length: 90 }, (_, i) => i + 10)
-      : Array.from({ length: 900 }, (_, i) => i + 100);
+    pool = level >= 5
+      ? Array.from({ length: 900 }, (_, i) => i + 100) // 100–999
+      : Array.from({ length: 90 }, (_, i) => i + 10);  // 10–99
   }
 
   if (mode === 'eng') {
@@ -166,9 +178,6 @@ function generatePool(total) {
   return shuffle(pool).slice(0, total);
 }
 
-function shuffle(arr) {
-  return [...arr].sort(() => Math.random() - 0.5);
-}
 
 /* =====================
    ▶ END GAME
