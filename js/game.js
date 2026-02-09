@@ -10,6 +10,10 @@ let answerIndex = 0;
 let mode = 'number';
 let player = 'Player';
 let items = [];
+if (soundOn) {
+  bgm.volume = 0.4;
+  bgm.play();
+}
 
 const snd = {
   start: new Audio('audio/start.mp3'),
@@ -31,6 +35,11 @@ function startGame() {
   document.querySelector('.game').classList.remove('hidden');
 
   snd.start.play();
+  if (soundOn) {
+  bgm.volume = 0.4;
+  bgm.play();
+}
+
   startRound();
 }
 
