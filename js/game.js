@@ -65,9 +65,12 @@ function startRound() {
   });
 
   // ปิดตัวเลขเมื่อหมดเวลา
-  setTimeout(() => {
-    [...grid.children].forEach(c => c.innerText = '❓');
-  }, revealTime);
+  clearTimeout(window.timeUp);
+
+window.timeUp = setTimeout(() => {
+  endGame();
+}, revealTime);
+
 }
 
 function checkAnswer(i, cell) {
