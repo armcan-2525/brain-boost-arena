@@ -126,13 +126,17 @@ function generatePool(total) {
 function shuffle(arr) {
   return arr.sort(() => Math.random() - 0.5);
 }
-
 function endGame() {
   saveScore();
-  showRank();
-  alert(`❌ เกมจบ\nคะแนน: ${score}`);
-  location.reload();
+
+  document.getElementById('finalScore').innerText =
+    `คะแนน: ${score}`;
+
+  document.getElementById('gameOver')
+    .classList.remove('hidden');
 }
+
+
 
 /* =====================
    🏆 RANK แยกตามโหมด
