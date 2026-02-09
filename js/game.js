@@ -193,3 +193,31 @@ function renderRank() {
 // โหลดทันทีตอนเข้าเว็บ
 window.addEventListener('load', renderRank);
 document.getElementById('mode').addEventListener('change', renderRank);
+function startGame() {
+  player = document.getElementById('playerName').value || 'Player';
+  mode = document.getElementById('mode').value;
+
+  score = 0;
+  level = 1;
+  gridSize = 4;
+
+  // ซ่อนหน้า setup + rank
+  document.getElementById('setup').classList.add('hidden');
+  document.querySelector('.game').classList.remove('hidden');
+
+  snd.start.play();
+  if (soundOn) {
+    bgm.volume = 0.4;
+    bgm.play();
+  }
+
+  startRound();
+}
+
+function changeProfile() {
+  document.getElementById('gameOver').classList.add('hidden');
+  document.getElementById('setup').classList.remove('hidden');
+  document.querySelector('.game').classList.add('hidden');
+
+  renderRank(); // กลับมาโชว์อันดับ
+}
