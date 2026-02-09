@@ -95,16 +95,23 @@ function updateLevel() {
 function generatePool(total) {
   let pool = [];
 
+  // 🔢 ตัวเลข (เลข 3 หลักเฉพาะเลเวลสูง)
   if (mode === 'number') {
-    pool = Array.from({ length: 99 }, (_, i) => i + 1);
+    if (level >= 4) {
+      pool = Array.from({ length: 900 }, (_, i) => i + 100); // 100–999
+    } else {
+      pool = Array.from({ length: 90 }, (_, i) => i + 10);  // 10–99
+    }
   }
 
+  // 🔤 อังกฤษ
   if (mode === 'eng') {
     pool = Array.from({ length: 26 }, (_, i) =>
       String.fromCharCode(65 + i)
     );
   }
 
+  // 🇹🇭 ไทย
   if (mode === 'thai') {
     pool = 'กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรลวศษสหฬอฮ'.split('');
   }
@@ -118,9 +125,14 @@ function shuffle(arr) {
 
 function endGame() {
   saveScore();
+  showRank();
   alert(`❌ เกมจบ\nคะแนน: ${score}`);
   location.reload();
 }
+
+/* =====================
+   🏆 RANK แยกตามโหมด
+===================== */
 
 function saveScore() {
   const key = 'rank_' + mode;
@@ -128,4 +140,10 @@ function saveScore() {
   data.push({ name: player, score });
   data.sort((a, b) => b.score - a.score);
   localStorage.setItem(key, JSON.stringify(data.slice(0, 10)));
+}
+
+function showRank() {
+  const key = 'rank_' + mode;
+  const data = JSON.parse(localStorage.getItem(key) || '[]');
+  console.table(data);
 }
