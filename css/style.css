@@ -1,209 +1,80 @@
-body {
-  margin: 0;
-  padding: 20px;
-  font-family: sans-serif;
-  background: linear-gradient(135deg,#1b0f2f,#3a1c71);
-  color: #fff;
-  text-align: center;
-}
-
-.card {
-  max-width: 560px;
-  margin: auto;
-  background: #241046;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.4);
-}
-
-input, select, button {
-  padding: 10px;
-  margin: 6px;
-  border-radius: 20px;
-  border: none;
-}
-
-button {
-  background: #ffcc00;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.hidden { display: none; }
-
-.grid {
-  display: grid;
-  gap: 8px;
-  margin-top: 15px;
-}
-
-.grid button {
-  padding: 15px;
-  font-size: 18px;
-  border-radius: 12px;
-  background: #4b2a85;
-  color: #fff;
-  transition: transform .2s;
-}
-
-.grid button:active {
-  transform: scale(.9);
-}
 /* =====================
-   📱 MOBILE OPTIMIZATION
+   🌌 GLOBAL
 ===================== */
-
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  min-height: 100vh;
-  padding: env(safe-area-inset-top)
-           env(safe-area-inset-right)
-           env(safe-area-inset-bottom)
-           env(safe-area-inset-left);
-}
-
-/* การ์ดหลัก */
-.card {
-  width: 100%;
-  max-width: 420px;
-  margin: auto;
-  padding: 16px;
-}
-
-/* หัวเกม */
-h1 {
-  font-size: clamp(20px, 5vw, 26px);
-  margin-bottom: 10px;
-}
-
-/* input / select / button */
-input,
-select,
-button {
-  width: 100%;
-  max-width: 100%;
-  font-size: 16px;
-  padding: 12px 16px;
-  margin: 6px 0;
-}
-
-/* ปุ่มหลัก */
-button {
-  min-height: 48px;
-  border-radius: 999px;
-}
-
-/* แสดงข้อมูล */
-#display {
-  font-size: clamp(14px, 4vw, 18px);
-  margin: 10px 0;
-}
-
-/* GRID เกม */
-#grid {
-  display: grid;
-  gap: 10px;
-}
-
-/* ช่องเกม */
-#grid button,
-.cell {
-  font-size: clamp(16px, 5vw, 22px);
-  padding: 14px 0;
-  border-radius: 14px;
-  min-height: 48px;
-  transition: transform .15s ease, background .15s ease;
-}
-
-/* เอฟเฟกต์กด */
-#grid button:active,
-.cell:active {
-  transform: scale(0.95);
-}
-
-/* สถานะ */
-#status {
-  font-size: 15px;
-  margin-top: 6px;
-}
-
-/* ตารางคะแนน */
-table {
-  font-size: 13px;
-}
-
-/* ปุ่มล่าง */
-#restartBtn,
-#changeProfileBtn {
-  margin-top: 10px;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #3b1d6b, #12002b);
+  color: #fff;
 }
 
 /* =====================
-   💫 Animation เบา ๆ
+   📱 APP LAYOUT
 ===================== */
-
-.card {
-  animation: fadeUp .5s ease;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* =====================
-   📲 จอเล็กมาก
-===================== */
-@media (max-width: 360px) {
-  #grid {
-    gap: 6px;
-  }
-
-  #grid button {
-    font-size: 14px;
-    padding: 10px 0;
-  }
-}
 .app {
   min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top, #2a155f, #0d061f);
-} 
-
-.screen {
-  width: 100%;
-  max-width: 420px;
-  min-height: 90vh;
-  border-radius: 28px;
-  padding: 16px;
-  box-shadow:
-    0 20px 40px rgba(0,0,0,.6),
-    inset 0 0 0 1px rgba(255,255,255,.05);
+  align-items: center;
+  padding:
+    env(safe-area-inset-top)
+    env(safe-area-inset-right)
+    env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
 }
 
 /* =====================
-   🎮 APP STORE BUTTON STYLE
+   🧩 CARD
 ===================== */
+.card {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+  border-radius: 24px;
+  background: linear-gradient(180deg,#2d1a5a,#1a0f33);
+  box-shadow: 0 20px 60px rgba(0,0,0,.6);
+  animation: fadeUp .5s ease;
+}
 
+.home-card h1 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: clamp(22px, 5vw, 28px);
+}
+
+/* =====================
+   ✍ INPUT / SELECT
+===================== */
+input,
+select {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: none;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+/* =====================
+   🎮 BUTTON (APP STORE STYLE)
+===================== */
 button {
+  width: 100%;
+  min-height: 48px;
+  padding: 14px;
+  border-radius: 999px;
+  border: none;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
   background: linear-gradient(135deg,#ffd84d,#ffb300);
   color: #000;
-  font-weight: 700;
-  letter-spacing: .3px;
   box-shadow: 0 6px 14px rgba(0,0,0,.35);
-  border: none;
   transition: transform .15s ease, box-shadow .15s ease;
 }
 
@@ -212,144 +83,21 @@ button:active {
   box-shadow: 0 4px 10px rgba(0,0,0,.25);
 }
 
-/* ช่องเกม */
-#grid button,
-.cell {
-  background: linear-gradient(135deg,#6a4cff,#3b1fa8);
-  color: #fff;
-  font-weight: 600;
-  border-radius: 16px;
-  box-shadow: 0 8px 18px rgba(0,0,0,.4);
-}
-
-/* ตอนตอบถูก / ผิด */
-.cell.correct {
-  background: linear-gradient(135deg,#2ecc71,#27ae60);
-}
-
-.cell.wrong {
-  background: linear-gradient(135deg,#e74c3c,#c0392b);
-}
-/* =====================
-   💫 GAME ANIMATION
-===================== */
-
-@keyframes zoomIn {
-  from {
-    opacity: 0;
-    transform: scale(0.92);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes levelUp {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.25); }
-  100% { transform: scale(1); }
-}
-
-/* ตอนเข้าเกม */
-.screen {
-  animation: zoomIn .45s ease;
-}
-
-/* ตอนเลเวลอัป */
-.level-up {
-  animation: levelUp .6s ease;
-}
-/* =====================
-   🟥 GAME OVER SCREEN
-===================== */
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.88);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-  animation: fadeIn .3s ease;
-}
-
-.gameover-card {
-  max-width: 360px;
-  width: 90%;
-  text-align: center;
-  animation: zoomIn .4s ease;
-}
-
-.hidden {
-  display: none;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0 }
-  to   { opacity: 1 }
-}
-
 /* =====================
    🔊 SOUND BUTTON
 ===================== */
-
 #soundBtn {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  font-size: 18px;
+  margin-top: 10px;
   background: rgba(255,255,255,.15);
   color: #fff;
-  backdrop-filter: blur(6px);
-}
-body {
-  background: radial-gradient(circle at top, #2b145f, #120825);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-}
-
-.card {
-  max-width: 420px;
-  margin: 40px auto;
-  padding: 24px;
-  border-radius: 24px;
-  background: linear-gradient(180deg,#2d1a5a,#1a0f33);
-  box-shadow: 0 20px 60px rgba(0,0,0,.6);
-  color: #fff;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-input, select {
-  width: 100%;
-  padding: 14px;
-  border-radius: 14px;
-  border: none;
-  margin-bottom: 12px;
-  font-size: 16px;
-}
-
-button {
-  width: 100%;
-  padding: 16px;
-  border-radius: 999px;
-  border: none;
   font-size: 18px;
-  font-weight: bold;
-  background: linear-gradient(90deg,#ffd54f,#ffb300);
-  color: #000;
-  cursor: pointer;
 }
 
+/* =====================
+   🏆 RANK CARD
+===================== */
 .rank-card {
-  margin-top: 24px;
+  margin-top: 20px;
   padding: 16px;
   border-radius: 18px;
   background: rgba(255,255,255,.08);
@@ -376,79 +124,114 @@ button {
   font-size: 15px;
 }
 
-.rank-1::before { content: "👑🥇 "; }
-.rank-2::before { content: "👑🥈 "; }
-.rank-3::before { content: "👑🥉 "; }
-
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at top, #3b1d6b, #12002b);
-  color: #fff;
-}
-
-.app {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.card {
-  background: #1c0f33;
-  border-radius: 20px;
-  padding: 20px;
-  width: 90%;
+/* =====================
+   🎯 GAME
+===================== */
+.game {
+  width: 100%;
   max-width: 420px;
-  box-shadow: 0 20px 40px rgba(0,0,0,.5);
 }
 
-.home-card h1 {
+#level {
   text-align: center;
-}
-
-input, select {
-  width: 100%;
-  padding: 14px;
-  border-radius: 12px;
-  border: none;
-  margin: 10px 0;
-  font-size: 16px;
-}
-
-.start-btn {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, #ffcc00, #ff9f00);
-  border: none;
-  border-radius: 16px;
   font-size: 18px;
-  font-weight: bold;
+  margin-bottom: 6px;
 }
 
-.rank-card {
-  margin-top: 20px;
-  background: rgba(255,255,255,.08);
+#display {
+  text-align: center;
+  margin-bottom: 12px;
+  font-size: clamp(14px, 4vw, 18px);
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  gap: 10px;
+}
+
+/* CELL */
+.grid button {
+  font-size: clamp(16px, 5vw, 22px);
+  padding: 14px 0;
   border-radius: 16px;
-  padding: 12px;
+  background: linear-gradient(135deg,#6a4cff,#3b1fa8);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 8px 18px rgba(0,0,0,.4);
+  transition: transform .15s ease, background .15s ease;
 }
 
-.rank-card ol {
-  padding-left: 20px;
+.grid button:active {
+  transform: scale(.95);
 }
 
+/* =====================
+   🟥 GAME OVER
+===================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeIn .3s ease;
+}
+
+.gameover-card {
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  animation: zoomIn .4s ease;
+}
+
+/* =====================
+   ✨ ANIMATION
+===================== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.level-up {
+  animation: levelUp .6s ease;
+}
+
+@keyframes levelUp {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* =====================
+   🧹 UTIL
+===================== */
 .hidden {
   display: none;
 }
 
-.grid {
-  display: grid;
-  gap: 8px;
-}
+/* =====================
+   📲 SMALL SCREEN
+===================== */
+@media (max-width: 360px) {
+  .grid {
+    gap: 6px;
+  }
 
-.grid button {
-  padding: 14px;
-  font-size: 18px;
-  border-radius: 10px;
-  border: none;
+  .grid button {
+    font-size: 14px;
+    padding: 10px 0;
+  }
 }
