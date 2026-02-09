@@ -6,6 +6,17 @@
   <title>Brain Boost Arena</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
+  <!-- GAME OVER SCREEN -->
+<div id="gameOver" class="overlay hidden">
+  <div class="card gameover-card">
+    <h2>💀 Game Over</h2>
+    <p id="finalScore">คะแนน: 0</p>
+
+    <button onclick="restartGame()">🔄 เล่นใหม่</button>
+    <button onclick="changeProfile()">👤 เปลี่ยนผู้เล่น</button>
+  </div>
+</div>
+
 <body>
 
 <div class="card">
@@ -38,4 +49,5 @@
     <!-- ของเดิมทั้งหมดอยู่ตรงนี้ -->
   </div>
 </div>
+
 
