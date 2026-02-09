@@ -189,3 +189,15 @@ function changeProfile() {
   document.getElementById('setup').style.display = 'block';
   document.querySelector('.game').classList.add('hidden');
 }
+function toggleSound() {
+  soundOn = !soundOn;
+
+  document.getElementById('soundBtn').innerText =
+    soundOn ? '🔊' : '🔇';
+
+  if (soundOn) {
+    bgm.play();
+  } else {
+    bgm.pause();
+  }
+}
