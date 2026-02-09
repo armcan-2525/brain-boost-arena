@@ -260,3 +260,33 @@ button:active {
 .level-up {
   animation: levelUp .6s ease;
 }
+/* =====================
+   🟥 GAME OVER SCREEN
+===================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeIn .3s ease;
+}
+
+.gameover-card {
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  animation: zoomIn .4s ease;
+}
+
+.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
