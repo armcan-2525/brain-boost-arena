@@ -174,3 +174,21 @@ table {
     padding: 10px 0;
   }
 }
+.app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #2a155f, #0d061f);
+}
+
+.screen {
+  width: 100%;
+  max-width: 420px;
+  min-height: 90vh;
+  border-radius: 28px;
+  padding: 16px;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.6),
+    inset 0 0 0 1px rgba(255,255,255,.05);
+}
