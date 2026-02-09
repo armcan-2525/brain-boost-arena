@@ -1,16 +1,23 @@
+/* =====================
+   🎮 BRAIN BOOST ARENA
+   FINAL GAME.JS
+===================== */
+
 let soundOn = true;
 const bgm = document.getElementById('bgm');
 
 let score = 0;
 let level = 1;
-let gridSize = 4;        // 4x4 = 16 ช่อง (เวอร์ชันแรก)
+let gridSize = 4;          // 4x4 = 16 ช่อง (เวอร์ชันแรก)
 let revealTime = 3000;
 let answerIndex = 0;
 let mode = 'number';
 let player = 'Player';
 let items = [];
 let timeUp = null;
+let canSelect = true;
 
+/* 🔊 SOUND */
 const snd = {
   start: new Audio('audio/start.mp3'),
   click: new Audio('audio/click.mp3'),
@@ -19,7 +26,9 @@ const snd = {
   level: new Audio('audio/levelup.mp3')
 };
 
-/* ▶ START GAME */
+/* =====================
+   ▶ START GAME
+===================== */
 function startGame() {
   player = document.getElementById('playerName').value || 'Player';
   mode = document.getElementById('mode').value;
@@ -42,13 +51,18 @@ function startGame() {
   startRound();
 }
 
-/* ▶ START ROUND */
+/* =====================
+   ▶ START ROUND
+===================== */
 function startRound() {
+  canSelect = true;
   updateLevel();
 
   const grid = document.getElementById('grid');
   grid.innerHTML = '';
-  grid.style.gridTemplateColumns = `repeat(${gridSize},1fr)`;
+
+  /* 📐 Grid ให้สมส่วนจอ */
+  grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
 
   const total = gridSize * gridSize;
   items = generatePool(total);
@@ -59,36 +73,59 @@ function startRound() {
 
   items.forEach((v, i) => {
     const cell = document.createElement('button');
+    cell.className = 'cell';
     cell.innerText = v;
-    cell.onclick = () => checkAnswer(i);
+    cell.dataset.index = i;
+    cell.onclick = () => checkAnswer(i, cell);
     grid.appendChild(cell);
   });
 
   clearTimeout(timeUp);
-  timeUp = setTimeout(endGame, revealTime);
+  timeUp = setTimeout(hideCells, revealTime);
 }
 
-/* ▶ CHECK ANSWER (กดถูกไปต่อทันที) */
-function checkAnswer(i) {
-  clearTimeout(timeUp);
+/* ⏱ หมดเวลา → ซ่อนเลข แต่ยังเดาได้ */
+function hideCells() {
+  document.querySelectorAll('.cell').forEach(btn => {
+    btn.innerText = '❓';
+    btn.classList.add('hidden-cell');
+  });
+}
+
+/* =====================
+   ▶ CHECK ANSWER
+===================== */
+function checkAnswer(i, cell) {
+  if (!canSelect) return;
+  canSelect = false;
+
   snd.click.play();
 
   if (i === answerIndex) {
+    cell.classList.add('correct');
+    navigator.vibrate?.(120);
     snd.correct.play();
     score += 10;
-    setTimeout(startRound, 500);
+
+    setTimeout(startRound, 700);
   } else {
+    cell.classList.add('wrong');
+    navigator.vibrate?.([80, 40, 80]);
     snd.wrong.play();
-    endGame();
+
+    setTimeout(endGame, 700);
   }
 }
 
-/* ▶ LEVEL SYSTEM (คุมไม่ให้โตเร็ว) */
+/* =====================
+   ▶ LEVEL SYSTEM
+===================== */
 function updateLevel() {
   const prev = level;
   level = Math.floor(score / 100) + 1;
 
-  if (level < 4) gridSize = 4;      // 16 ช่องนาน ๆ
+  /* คุมไม่ให้ยากเร็ว */
+  if (level < 4) gridSize = 4;
   else if (level < 7) gridSize = 5;
   else gridSize = 6;
 
@@ -100,11 +137,13 @@ function updateLevel() {
   if (level > prev) {
     snd.level.play();
     lvEl.classList.add('level-up');
-    setTimeout(() => lvEl.classList.remove('level-up'), 500);
+    setTimeout(() => lvEl.classList.remove('level-up'), 600);
   }
 }
 
-/* ▶ POOL GENERATOR */
+/* =====================
+   ▶ POOL GENERATOR
+===================== */
 function generatePool(total) {
   let pool = [];
 
@@ -131,7 +170,9 @@ function shuffle(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
 }
 
-/* ▶ END GAME */
+/* =====================
+   ▶ END GAME
+===================== */
 function endGame() {
   clearTimeout(timeUp);
   bgm.pause();
@@ -140,11 +181,12 @@ function endGame() {
   document.getElementById('finalScore').innerText =
     `คะแนน: ${score}`;
 
-  document.getElementById('gameOver')
-    .classList.remove('hidden');
+  document.getElementById('gameOver').classList.remove('hidden');
 }
 
-/* 🏆 RANK แยกโหมด */
+/* =====================
+   🏆 RANK SYSTEM
+===================== */
 function saveScore() {
   const key = 'rank_' + mode;
   const data = JSON.parse(localStorage.getItem(key) || '[]');
@@ -153,7 +195,28 @@ function saveScore() {
   localStorage.setItem(key, JSON.stringify(data.slice(0, 10)));
 }
 
-/* ▶ CONTROLS */
+function renderRank() {
+  const key = 'rank_' + document.getElementById('mode').value;
+  const data = JSON.parse(localStorage.getItem(key) || '[]');
+  const list = document.getElementById('rankList');
+
+  list.innerHTML = '';
+
+  data.slice(0, 10).forEach((r, i) => {
+    let crown = '';
+    if (i === 0) crown = '👑🥇';
+    else if (i === 1) crown = '👑🥈';
+    else if (i === 2) crown = '👑🥉';
+
+    const li = document.createElement('li');
+    li.innerHTML = `${crown} <b>${r.name}</b> — ${r.score}`;
+    list.appendChild(li);
+  });
+}
+
+/* =====================
+   ▶ CONTROLS
+===================== */
 function restartGame() {
   document.getElementById('gameOver').classList.add('hidden');
   score = 0;
@@ -167,6 +230,7 @@ function changeProfile() {
   document.getElementById('gameOver').classList.add('hidden');
   document.getElementById('setup').classList.remove('hidden');
   document.querySelector('.game').classList.add('hidden');
+  renderRank();
 }
 
 function toggleSound() {
@@ -175,72 +239,7 @@ function toggleSound() {
     soundOn ? '🔊' : '🔇';
   soundOn ? bgm.play() : bgm.pause();
 }
-function renderRank() {
-  const key = 'rank_' + document.getElementById('mode').value;
-  const data = JSON.parse(localStorage.getItem(key) || '[]');
 
-  const list = document.getElementById('rankList');
-  list.innerHTML = '';
-
-  data.slice(0,10).forEach((p, i) => {
-    const li = document.createElement('li');
-    li.className = `rank-${i+1}`;
-    li.innerHTML = `<span>${p.name}</span><span>${p.score}</span>`;
-    list.appendChild(li);
-  });
-}
-
-// โหลดทันทีตอนเข้าเว็บ
+/* ▶ INIT */
 window.addEventListener('load', renderRank);
 document.getElementById('mode').addEventListener('change', renderRank);
-function startGame() {
-  player = document.getElementById('playerName').value || 'Player';
-  mode = document.getElementById('mode').value;
-
-  score = 0;
-  level = 1;
-  gridSize = 4;
-
-  // ซ่อนหน้า setup + rank
-  document.getElementById('setup').classList.add('hidden');
-  document.querySelector('.game').classList.remove('hidden');
-
-  snd.start.play();
-  if (soundOn) {
-    bgm.volume = 0.4;
-    bgm.play();
-  }
-
-  startRound();
-}
-
-function changeProfile() {
-  document.getElementById('gameOver').classList.add('hidden');
-  document.getElementById('setup').classList.remove('hidden');
-  document.querySelector('.game').classList.add('hidden');
-
-  renderRank(); // กลับมาโชว์อันดับ
-}
-function renderRank() {
-  const mode = document.getElementById('mode').value;
-  const key = 'rank_' + mode;
-  const data = JSON.parse(localStorage.getItem(key) || '[]');
-
-  const list = document.getElementById('rankList');
-  list.innerHTML = '';
-
-  data.slice(0, 10).forEach((r, i) => {
-    const li = document.createElement('li');
-
-    let crown = '';
-    if (i === 0) crown = '👑🥇';
-    else if (i === 1) crown = '👑🥈';
-    else if (i === 2) crown = '👑🥉';
-
-    li.innerHTML = `${crown} <b>${r.name}</b> — ${r.score}`;
-    list.appendChild(li);
-  });
-}
-
-// โหลดครั้งแรก
-renderRank();
