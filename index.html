@@ -15,6 +15,7 @@
 
   <!-- SETUP -->
   <div id="setup">
+
     <input id="playerName" placeholder="ชื่อผู้เล่น">
 
     <select id="mode">
@@ -23,17 +24,19 @@
       <option value="eng">A-Z English</option>
     </select>
 
-    <button onclick="startGame()">▶ เริ่มเกม</button>
+    <button class="play-btn" onclick="startGame()">▶ เริ่มเกม</button>
 
-    <button id="soundBtn" onclick="toggleSound()">🔊</button>
+    <button id="soundBtn" class="sound-btn" onclick="toggleSound()">🔊</button>
 
     <audio id="bgm" src="audio/bgm.mp3" loop></audio>
-  </div>
 
-  <div class="rank-card">
-  <h3>🏆 TOP 10</h3>
-  <ol id="rankList"></ol>
-</div>
+    <!-- 🏆 RANK -->
+    <div class="rank-card">
+      <h3>🏆 TOP 10</h3>
+      <ol id="rankList"></ol>
+    </div>
+
+  </div>
 
   <!-- GAME -->
   <div class="game hidden">
@@ -58,4 +61,3 @@
 <script src="js/game.js"></script>
 </body>
 </html>
-
