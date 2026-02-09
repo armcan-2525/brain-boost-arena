@@ -180,7 +180,19 @@ table {
   align-items: center;
   justify-content: center;
   background: radial-gradient(circle at top, #2a155f, #0d061f);
+} 
+
+.screen {
+  width: 100%;
+  max-width: 420px;
+  min-height: 90vh;
+  border-radius: 28px;
+  padding: 16px;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.6),
+    inset 0 0 0 1px rgba(255,255,255,.05);
 }
+
 /* =====================
    🎮 APP STORE BUTTON STYLE
 ===================== */
@@ -218,14 +230,33 @@ button:active {
 .cell.wrong {
   background: linear-gradient(135deg,#e74c3c,#c0392b);
 }
+/* =====================
+   💫 GAME ANIMATION
+===================== */
 
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes levelUp {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+/* ตอนเข้าเกม */
 .screen {
-  width: 100%;
-  max-width: 420px;
-  min-height: 90vh;
-  border-radius: 28px;
-  padding: 16px;
-  box-shadow:
-    0 20px 40px rgba(0,0,0,.6),
-    inset 0 0 0 1px rgba(255,255,255,.05);
+  animation: zoomIn .45s ease;
+}
+
+/* ตอนเลเวลอัป */
+.level-up {
+  animation: levelUp .6s ease;
 }
