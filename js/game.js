@@ -157,3 +157,22 @@ function showRank() {
 }
 document.getElementById('level').classList.add('level-up');
 setTimeout(()=>level.classList.remove('level-up'),600);
+
+function restartGame() {
+  document.getElementById('gameOver')
+    .classList.add('hidden');
+
+  score = 0;
+  level = 1;
+  gridSize = 4;
+
+  nextRound();
+}
+
+function changeProfile() {
+  document.getElementById('gameOver')
+    .classList.add('hidden');
+
+  document.getElementById('setup').style.display = 'block';
+  document.querySelector('.game').classList.add('hidden');
+}
