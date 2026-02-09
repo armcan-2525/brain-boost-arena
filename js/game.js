@@ -1,3 +1,7 @@
+let soundOn = true;
+const bgm = document.getElementById('bgm');
+
+
 let score = 0;
 let level = 1;
 let gridSize = 4;        // เริ่ม 4x4 = 16 ช่อง
