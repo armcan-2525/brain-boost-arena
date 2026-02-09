@@ -6,7 +6,40 @@
   <title>Brain Boost Arena</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-  <!-- GAME OVER SCREEN -->
+
+<body>
+
+<div class="card">
+
+  <h1>🧠 Brain Boost Arena</h1>
+
+  <!-- SETUP -->
+  <div id="setup">
+    <input id="playerName" placeholder="ชื่อผู้เล่น">
+
+    <select id="mode">
+      <option value="number">🔢 ตัวเลข</option>
+      <option value="thai">ก-ฮ ภาษาไทย</option>
+      <option value="eng">A-Z English</option>
+    </select>
+
+    <button onclick="startGame()">▶ เริ่มเกม</button>
+
+    <button id="soundBtn" onclick="toggleSound()">🔊</button>
+
+    <audio id="bgm" src="audio/bgm.mp3" loop></audio>
+  </div>
+
+  <!-- GAME -->
+  <div class="game hidden">
+    <div id="level">Lv.1</div>
+    <div id="display"></div>
+    <div id="grid" class="grid"></div>
+  </div>
+
+</div>
+
+<!-- GAME OVER -->
 <div id="gameOver" class="overlay hidden">
   <div class="card gameover-card">
     <h2>💀 Game Over</h2>
@@ -17,44 +50,6 @@
   </div>
 </div>
 
-<body>
-
-<div class="card">
-
-  <h1>🧠 Brain Boost Arena</h1>
-
-  <div id="setup">
-    <input id="playerName" placeholder="ชื่อผู้เล่น">
-    <select id="mode">
-      <option value="number">🔢 ตัวเลข</option>
-      <option value="thai">ก-ฮ ภาษาไทย</option>
-      <option value="eng">A-Z English</option>
-    </select>
-    <button onclick="startGame()">เริ่มเกม</button>
-<button id="soundBtn" onclick="toggleSound()">
-  🔊
-</button>
-
-<audio id="bgm" src="audio/bgm.mp3" loop></audio>
-
-  </div>
-
-  <div class="game hidden">
-    <div id="level">Lv.1</div>
-    <div id="display"></div>
-    <div id="grid" class="grid"></div>
-  </div>
-
-</div>
-
 <script src="js/game.js"></script>
 </body>
 </html>
-<div class="app">
-  <div class="screen card">
-    <!-- ของเดิมทั้งหมดอยู่ตรงนี้ -->
-  </div>
-</div>
-
-
-
