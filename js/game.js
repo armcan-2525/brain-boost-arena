@@ -1,19 +1,15 @@
 let soundOn = true;
 const bgm = document.getElementById('bgm');
 
-
 let score = 0;
 let level = 1;
-let gridSize = 4;        // เริ่ม 4x4 = 16 ช่อง
+let gridSize = 4;        // 4x4 = 16 ช่อง (เวอร์ชันแรก)
 let revealTime = 3000;
 let answerIndex = 0;
 let mode = 'number';
 let player = 'Player';
 let items = [];
-if (soundOn) {
-  bgm.volume = 0.4;
-  bgm.play();
-}
+let timeUp = null;
 
 const snd = {
   start: new Audio('audio/start.mp3'),
@@ -23,6 +19,7 @@ const snd = {
   level: new Audio('audio/levelup.mp3')
 };
 
+/* ▶ START GAME */
 function startGame() {
   player = document.getElementById('playerName').value || 'Player';
   mode = document.getElementById('mode').value;
@@ -33,16 +30,19 @@ function startGame() {
 
   document.getElementById('setup').classList.add('hidden');
   document.querySelector('.game').classList.remove('hidden');
+  document.getElementById('gameOver').classList.add('hidden');
 
   snd.start.play();
   if (soundOn) {
-  bgm.volume = 0.4;
-  bgm.play();
-}
+    bgm.volume = 0.4;
+    bgm.currentTime = 0;
+    bgm.play();
+  }
 
   startRound();
 }
 
+/* ▶ START ROUND */
 function startRound() {
   updateLevel();
 
@@ -60,78 +60,66 @@ function startRound() {
   items.forEach((v, i) => {
     const cell = document.createElement('button');
     cell.innerText = v;
-    cell.onclick = () => checkAnswer(i, cell);
+    cell.onclick = () => checkAnswer(i);
     grid.appendChild(cell);
   });
 
-  // ปิดตัวเลขเมื่อหมดเวลา
-  clearTimeout(window.timeUp);
-
-window.timeUp = setTimeout(() => {
-  endGame();
-}, revealTime);
-
+  clearTimeout(timeUp);
+  timeUp = setTimeout(endGame, revealTime);
 }
 
-function checkAnswer(i, cell) {
+/* ▶ CHECK ANSWER (กดถูกไปต่อทันที) */
+function checkAnswer(i) {
+  clearTimeout(timeUp);
   snd.click.play();
-
-  const grid = document.getElementById('grid');
-  [...grid.children].forEach((c, idx) => {
-    c.innerText = items[idx];
-    c.disabled = true;
-  });
 
   if (i === answerIndex) {
     snd.correct.play();
     score += 10;
-    setTimeout(startRound, 1200);
+    setTimeout(startRound, 500);
   } else {
     snd.wrong.play();
     endGame();
   }
 }
+
+/* ▶ LEVEL SYSTEM (คุมไม่ให้โตเร็ว) */
 function updateLevel() {
   const prev = level;
-
   level = Math.floor(score / 100) + 1;
-  gridSize = 4 + level - 1;
-  revealTime = level >= 3 ? 5000 : 3000;
+
+  if (level < 4) gridSize = 4;      // 16 ช่องนาน ๆ
+  else if (level < 7) gridSize = 5;
+  else gridSize = 6;
+
+  revealTime = level >= 5 ? 5000 : 3000;
 
   const lvEl = document.getElementById('level');
   lvEl.innerText = `Lv.${level}`;
 
   if (level > prev) {
-    sounds.levelup.play();
-
-    // trigger animation
+    snd.level.play();
     lvEl.classList.add('level-up');
-    setTimeout(() => lvEl.classList.remove('level-up'), 600);
+    setTimeout(() => lvEl.classList.remove('level-up'), 500);
   }
 }
 
-
-
+/* ▶ POOL GENERATOR */
 function generatePool(total) {
   let pool = [];
 
-  // 🔢 ตัวเลข (เลข 3 หลักเฉพาะเลเวลสูง)
   if (mode === 'number') {
-    if (level >= 4) {
-      pool = Array.from({ length: 900 }, (_, i) => i + 100); // 100–999
-    } else {
-      pool = Array.from({ length: 90 }, (_, i) => i + 10);  // 10–99
-    }
+    pool = level < 5
+      ? Array.from({ length: 90 }, (_, i) => i + 10)
+      : Array.from({ length: 900 }, (_, i) => i + 100);
   }
 
-  // 🔤 อังกฤษ
   if (mode === 'eng') {
     pool = Array.from({ length: 26 }, (_, i) =>
       String.fromCharCode(65 + i)
     );
   }
 
-  // 🇹🇭 ไทย
   if (mode === 'thai') {
     pool = 'กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรลวศษสหฬอฮ'.split('');
   }
@@ -140,11 +128,13 @@ function generatePool(total) {
 }
 
 function shuffle(arr) {
-  return arr.sort(() => Math.random() - 0.5);
+  return [...arr].sort(() => Math.random() - 0.5);
 }
-function endGame() {
-  bgm.pause();
 
+/* ▶ END GAME */
+function endGame() {
+  clearTimeout(timeUp);
+  bgm.pause();
   saveScore();
 
   document.getElementById('finalScore').innerText =
@@ -154,12 +144,7 @@ function endGame() {
     .classList.remove('hidden');
 }
 
-
-
-/* =====================
-   🏆 RANK แยกตามโหมด
-===================== */
-
+/* 🏆 RANK แยกโหมด */
 function saveScore() {
   const key = 'rank_' + mode;
   const data = JSON.parse(localStorage.getItem(key) || '[]');
@@ -168,41 +153,25 @@ function saveScore() {
   localStorage.setItem(key, JSON.stringify(data.slice(0, 10)));
 }
 
-function showRank() {
-  const key = 'rank_' + mode;
-  const data = JSON.parse(localStorage.getItem(key) || '[]');
-  console.table(data);
-}
-document.getElementById('level').classList.add('level-up');
-setTimeout(()=>level.classList.remove('level-up'),600);
-
+/* ▶ CONTROLS */
 function restartGame() {
-  document.getElementById('gameOver')
-    .classList.add('hidden');
-
+  document.getElementById('gameOver').classList.add('hidden');
   score = 0;
   level = 1;
   gridSize = 4;
-
-  nextRound();
+  if (soundOn) bgm.play();
+  startRound();
 }
 
 function changeProfile() {
-  document.getElementById('gameOver')
-    .classList.add('hidden');
-
-  document.getElementById('setup').style.display = 'block';
+  document.getElementById('gameOver').classList.add('hidden');
+  document.getElementById('setup').classList.remove('hidden');
   document.querySelector('.game').classList.add('hidden');
 }
+
 function toggleSound() {
   soundOn = !soundOn;
-
   document.getElementById('soundBtn').innerText =
     soundOn ? '🔊' : '🔇';
-
-  if (soundOn) {
-    bgm.play();
-  } else {
-    bgm.pause();
-  }
+  soundOn ? bgm.play() : bgm.pause();
 }
