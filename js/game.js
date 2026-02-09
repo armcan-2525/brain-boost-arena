@@ -221,3 +221,26 @@ function changeProfile() {
 
   renderRank(); // กลับมาโชว์อันดับ
 }
+function renderRank() {
+  const mode = document.getElementById('mode').value;
+  const key = 'rank_' + mode;
+  const data = JSON.parse(localStorage.getItem(key) || '[]');
+
+  const list = document.getElementById('rankList');
+  list.innerHTML = '';
+
+  data.slice(0, 10).forEach((r, i) => {
+    const li = document.createElement('li');
+
+    let crown = '';
+    if (i === 0) crown = '👑🥇';
+    else if (i === 1) crown = '👑🥈';
+    else if (i === 2) crown = '👑🥉';
+
+    li.innerHTML = `${crown} <b>${r.name}</b> — ${r.score}`;
+    list.appendChild(li);
+  });
+}
+
+// โหลดครั้งแรก
+renderRank();
