@@ -175,3 +175,21 @@ function toggleSound() {
     soundOn ? '🔊' : '🔇';
   soundOn ? bgm.play() : bgm.pause();
 }
+function renderRank() {
+  const key = 'rank_' + document.getElementById('mode').value;
+  const data = JSON.parse(localStorage.getItem(key) || '[]');
+
+  const list = document.getElementById('rankList');
+  list.innerHTML = '';
+
+  data.slice(0,10).forEach((p, i) => {
+    const li = document.createElement('li');
+    li.className = `rank-${i+1}`;
+    li.innerHTML = `<span>${p.name}</span><span>${p.score}</span>`;
+    list.appendChild(li);
+  });
+}
+
+// โหลดทันทีตอนเข้าเว็บ
+window.addEventListener('load', renderRank);
+document.getElementById('mode').addEventListener('change', renderRank);
