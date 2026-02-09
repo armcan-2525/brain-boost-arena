@@ -181,6 +181,43 @@ table {
   justify-content: center;
   background: radial-gradient(circle at top, #2a155f, #0d061f);
 }
+/* =====================
+   🎮 APP STORE BUTTON STYLE
+===================== */
+
+button {
+  background: linear-gradient(135deg,#ffd84d,#ffb300);
+  color: #000;
+  font-weight: 700;
+  letter-spacing: .3px;
+  box-shadow: 0 6px 14px rgba(0,0,0,.35);
+  border: none;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+button:active {
+  transform: scale(.96);
+  box-shadow: 0 4px 10px rgba(0,0,0,.25);
+}
+
+/* ช่องเกม */
+#grid button,
+.cell {
+  background: linear-gradient(135deg,#6a4cff,#3b1fa8);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.4);
+}
+
+/* ตอนตอบถูก / ผิด */
+.cell.correct {
+  background: linear-gradient(135deg,#2ecc71,#27ae60);
+}
+
+.cell.wrong {
+  background: linear-gradient(135deg,#e74c3c,#c0392b);
+}
 
 .screen {
   width: 100%;
