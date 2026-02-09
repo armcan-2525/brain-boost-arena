@@ -4,6 +4,8 @@
 ===================== */
 
 let soundOn = true;
+let vibrationOn = true;
+
 const bgm = document.getElementById('bgm');
 
 let score = 0;
@@ -16,6 +18,7 @@ let player = 'Player';
 let items = [];
 let timeUp = null;
 let canSelect = true;
+let timerInterval = null;
 
 /* 🔊 SOUND */
 const snd = {
@@ -26,7 +29,16 @@ const snd = {
   level: new Audio('audio/levelup.mp3')
 };
 
-/* ▶ START GAME */
+/* 👑 SVG CROWN */
+const crownSVG = `
+<svg width="20" height="20" viewBox="0 0 24 24" fill="gold"
+ xmlns="http://www.w3.org/2000/svg">
+ <path d="M3 7l4 4 5-6 5 6 4-4v10H3V7z"/>
+</svg>`;
+
+/* =====================
+   ▶ START GAME
+===================== */
 function startGame() {
   player = document.getElementById('playerName').value || 'Player';
   mode = document.getElementById('mode').value;
@@ -49,15 +61,22 @@ function startGame() {
   startRound();
 }
 
-/* ▶ START ROUND */
+/* =====================
+   ▶ START ROUND
+===================== */
 function startRound() {
+  clearTimeout(timeUp);
+  clearInterval(timerInterval);
+
   canSelect = true;
   updateLevel();
 
   const grid = document.getElementById('grid');
   grid.innerHTML = '';
 
+  /* 📱 เต็มจอมือถือ */
   grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+  grid.style.height = 'calc(100vh - 220px)';
 
   const total = gridSize * gridSize;
   items = generatePool(total);
@@ -74,20 +93,34 @@ function startRound() {
     grid.appendChild(cell);
   });
 
-  clearTimeout(timeUp);
+  startTimer();
   timeUp = setTimeout(hideCells, revealTime);
 }
 
-/* ⏱ หมดเวลา → ปิดเลข แต่ยังเดาได้ */
+/* ⏳ TIMER BAR */
+function startTimer() {
+  const bar = document.getElementById('timeBar');
+  let t = revealTime;
+  bar.style.width = '100%';
+
+  timerInterval = setInterval(() => {
+    t -= 50;
+    bar.style.width = `${(t / revealTime) * 100}%`;
+    if (t <= 0) clearInterval(timerInterval);
+  }, 50);
+}
+
+/* ⏱ หมดเวลา → ซ่อนเลข แต่ยังเดาได้ */
 function hideCells() {
   document.querySelectorAll('.cell').forEach(btn => {
     btn.innerText = '❓';
-    btn.classList.add('masked');
+    btn.classList.add('hidden-cell');
   });
-  canSelect = true;
 }
 
-/* ▶ CHECK ANSWER */
+/* =====================
+   ▶ CHECK ANSWER
+===================== */
 function checkAnswer(i, cell) {
   if (!canSelect) return;
   canSelect = false;
@@ -96,39 +129,32 @@ function checkAnswer(i, cell) {
 
   if (i === answerIndex) {
     cell.classList.add('correct');
-    navigator.vibrate?.(120);
+    if (vibrationOn) navigator.vibrate?.(120);
     snd.correct.play();
     score += 10;
 
     setTimeout(startRound, 700);
   } else {
     cell.classList.add('wrong');
-    navigator.vibrate?.([80, 40, 80]);
+    if (vibrationOn) navigator.vibrate?.([80, 40, 80]);
     snd.wrong.play();
 
     setTimeout(endGame, 700);
   }
 }
 
-/* ▶ LEVEL SYSTEM (100–600 แต้ม ตามที่กำหนด) */
+/* =====================
+   ▶ LEVEL SYSTEM (100–600)
+===================== */
 function updateLevel() {
   const prev = level;
 
-  if (score < 100) {
-    level = 1; gridSize = 4;
-  } else if (score < 200) {
-    level = 2; gridSize = 5;
-  } else if (score < 300) {
-    level = 3; gridSize = 6;
-  } else if (score < 400) {
-    level = 4; gridSize = 7;
-  } else if (score < 500) {
-    level = 5; gridSize = 4; // เลข 3 หลัก 16 ช่อง
-  } else if (score < 600) {
-    level = 6; gridSize = 5;
-  } else {
-    level = 7; gridSize = 6;
-  }
+  level = Math.floor(score / 100) + 1;
+  if (level > 7) level = 7;
+
+  gridSize = level <= 4
+    ? 4 + (level - 1)
+    : 4 + (level - 5);
 
   revealTime = level >= 5 ? 2500 : 3000;
 
@@ -142,7 +168,9 @@ function updateLevel() {
   }
 }
 
-/* ▶ POOL GENERATOR */
+/* =====================
+   ▶ POOL GENERATOR
+===================== */
 function generatePool(total) {
   let pool = [];
 
@@ -165,13 +193,12 @@ function generatePool(total) {
   return shuffle(pool).slice(0, total);
 }
 
-function shuffle(arr) {
-  return [...arr].sort(() => Math.random() - 0.5);
-}
-
-/* ▶ END GAME */
+/* =====================
+   ▶ END GAME
+===================== */
 function endGame() {
   clearTimeout(timeUp);
+  clearInterval(timerInterval);
   bgm.pause();
   saveScore();
 
@@ -181,7 +208,9 @@ function endGame() {
   document.getElementById('gameOver').classList.remove('hidden');
 }
 
-/* 🏆 RANK */
+/* =====================
+   🏆 RANK SYSTEM (SVG)
+===================== */
 function saveScore() {
   const key = 'rank_' + mode;
   const data = JSON.parse(localStorage.getItem(key) || '[]');
@@ -194,39 +223,20 @@ function renderRank() {
   const key = 'rank_' + document.getElementById('mode').value;
   const data = JSON.parse(localStorage.getItem(key) || '[]');
   const list = document.getElementById('rankList');
-  if (!list) return;
 
   list.innerHTML = '';
 
-  data.slice(0, 10).forEach((r, i) => {
-    let crown = '';
-    if (i === 0) crown = '👑🥇';
-    else if (i === 1) crown = '👑🥈';
-    else if (i === 2) crown = '👑🥉';
-
+  data.forEach((r, i) => {
     const li = document.createElement('li');
-    li.innerHTML = `${crown} <b>${r.name}</b> — ${r.score}`;
+    li.innerHTML =
+      `${i < 3 ? crownSVG : ''} <b>${r.name}</b> — ${r.score}`;
     list.appendChild(li);
   });
 }
 
-/* ▶ CONTROLS */
-function restartGame() {
-  document.getElementById('gameOver').classList.add('hidden');
-  score = 0;
-  level = 1;
-  gridSize = 4;
-  if (soundOn) bgm.play();
-  startRound();
-}
-
-function changeProfile() {
-  document.getElementById('gameOver').classList.add('hidden');
-  document.getElementById('setup').classList.remove('hidden');
-  document.querySelector('.game').classList.add('hidden');
-  renderRank();
-}
-
+/* =====================
+   ▶ CONTROLS
+===================== */
 function toggleSound() {
   soundOn = !soundOn;
   document.getElementById('soundBtn').innerText =
@@ -234,6 +244,12 @@ function toggleSound() {
   soundOn ? bgm.play() : bgm.pause();
 }
 
+function toggleVibration() {
+  vibrationOn = !vibrationOn;
+  document.getElementById('vibrateBtn').innerText =
+    vibrationOn ? '📳' : '📴';
+}
+
 /* ▶ INIT */
 window.addEventListener('load', renderRank);
-document.getElementById('mode')?.addEventListener('change', renderRank);
+document.getElementById('mode').addEventListener('change', renderRank);
